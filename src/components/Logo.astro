@@ -1,8 +1,9 @@
 ---
 import { SITE } from 'astrowind:config';
+import head from '../assets/favicons/favicon.png'; 
 ---
 
-<img src="/src/assets/favicons/favicon.png" width="55" height="55" alt="Logo Head of Ramblinggeek">
+<img src={head.src} width="55" height="55" alt="Logo Head of Ramblinggeek" />
 <span
   class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
 >
