@@ -65,6 +65,7 @@ export const footerData = {
   socialLinks: [
     
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/RamblingGeekUK' },
+    { ariaLabel: 'BlueSky', icon: 'tabler:brand-bluesky', href: 'https://bsky.app/profile/ramblinggeek.social' },
     { ariaLabel: 'Twitch', icon: 'tabler:brand-twitch', href: 'https://www.twitch.tv/ramblinggeek' },
     { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/wayne-t-taylor' },
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: 'https://www.instagram.com/ramblinggeek' },
