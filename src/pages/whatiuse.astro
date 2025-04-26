@@ -1,0 +1,88 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+
+const metadata = {
+    title: 'RamblingGeek - What I Use',
+    ignoreTitleTemplate: false,
+  };
+
+---
+
+<Layout metadata={metadata}>
+        
+    <Features2
+        title="What I Use"
+        subtitle="A collection of hardware and software that I use.<br><span class='text-sm font-normal'>Some links may be affiliate</span><br />"
+        items={[
+        {
+            title: 'PC',
+            description: `
+                <ul>
+                    <li><a href="https://amzn.to/42MziAb" target="_blank" rel="noopender">AMD Ryzen 9 5900x 12-Core Processor</a></li>
+                    <li><a href="https://amzn.to/3NdBRot" target="_blank" rel="noopender">Corsair Vengeance RGB PRO 64gb</a></li>
+                    <li><a href="https://amzn.to/446fqKT" target="_blank" rel="noopender">Sabrent 2TB</a></li>
+                    <li><a href="https://amzn.to/3MVvDrZ" target="_blank" rel="noopender">Samsung 860 EVO Pro 512GB</a></li>
+                    <li><a href="https://amzn.to/43LBKG3" target="_blank" rel="noopender">Nvidia 1660 Super</a></li>
+                    <li><a href="https://amzn.to/43LZVUZ" target="_blank" rel="noopender">Corsair Carbide SPEC-06</a></li>
+                    <li><a href="https://www.keychron.com/products/keychron-q6-qmk-custom-mechanical-keyboard-iso-layout-collection" target="_blank" rel="noopender">Keychron Q6 ISO</a></li>
+                </ul>
+                `,
+            icon: '',
+        },
+        {
+            title: 'Displays',
+            description:
+            `<ul>
+                <li><a href="https://amzn.to/4jItYok" target="_blank" rel="noopender">Samsung 49” UltraWide Monitor</a></li>
+                <li><a href="https://amzn.to/45PxkzW" target="_blank" rel="noopender">Ergotron HX - Arm</a></li>
+                <li><a href="https://amzn.to/3Nhr1xT" target="_blank" rel="noopender">2 x LG 27” 4k Monitors (desk/workbench)</a></li>
+            </ui>`,
+            icon: '',
+        },
+        {
+            title: 'Elgato',
+            description:
+            `<ul>
+                <li><a href="https://amzn.to/42rjeBR" target="_blank" rel="noopener">3 x Elgato StreamDeck 32 Button</a></li>
+                <li><a href="https://amzn.to/3WSJOTg" target="_blank" rel="noopender">Elgato StreamDeck+</a></li>
+                <li><a href="https://amzn.to/3oWrX15" target="_blank" rel="noopender">Elgato Wave XLR</a></li>
+                <li><a href="https://amzn.to/45TxC8K" target="_blank" rel="noopender">Elgato Keylights x 2</a></li>
+                <li><a href="https://amzn.to/3oUNsPS" target="_blank" rel="noopender">Elgato 4K60 Pro MK.2</a></li>
+                <li><a href="https://www.elgato.com/uk/en/p/wave-mic-arm" target="_blank" rel="noopender">Elgato Wave Mic Arm</a></li>
+                <li><a href="" target="_blank" rel="noopender">Elgato Mic DX</a></li>
+            </ul>`,
+            icon:'',
+        },
+        {
+            title: 'Furniture',
+            description:
+            `<ul>
+                <li><a href="https://www.autonomous.ai/office-chairs/ergonomic-chair" target="_blank" rel="noopender">Autonomous Chair</a></li>
+                <li><a href="https://amzn.to/3NeYsRF" target="_blank" rel="noopender">Standing Desk Frame</a></li>
+            </ul>`,
+            icon: '',
+        },
+        {
+            title: 'Camera Hardware',
+            description:
+            `<ul>
+                <li><a href="https://amzn.to/3oS2rdr" target="_blank" rel="noopender">Sony A6400 Camera</a></li>
+                <li><a href="https://amzn.to/3CdVyq2" target="_blank" rel="noopender">Sigma 16mm F1.4 DC DN Lens</a></li>
+                <li><a href="#" target="_blank" rel="noopender">3 x Logitech C920</a></li>
+            </ul>`,
+            icon: '',
+        },
+        {
+            title: '3D Printer',
+            description:
+            `<ul>
+                <li><a href="https://uk.store.bambulab.com/products/p1s?from=home_web" target="_blank" rel="noopender">Bambu P1S with AMS</a></li>
+            </ul>`,
+            icon: '',
+        }
+        ]}
+    >
+  </Features2>
+  
+</Layout>

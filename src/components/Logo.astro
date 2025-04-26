@@ -2,8 +2,31 @@
 import { SITE } from 'astrowind:config';
 ---
 
+<img src="/src/assets/favicons/favicon.png" width="55" height="55" alt="Logo Head of Ramblinggeek">
 <span
   class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
 >
-  🚀 {SITE?.name}
+  <span id="rotating-text">RamblingGeek</span>
+  <style>
+    #rotating-text {
+      transition: opacity 0.5s ease-in-out;
+    }
+    .fade-out {
+      opacity: 0;
+    }
+  </style>
+  <script>
+    const texts = ["RamblingGeek", "Wayne Taylor"];
+    let index = 0;
+    const rotatingText = document.getElementById('rotating-text');
+
+    setInterval(() => {
+      rotatingText.classList.add('fade-out');
+      setTimeout(() => {
+        index = (index + 1) % texts.length;
+        rotatingText.textContent = texts[index];
+        rotatingText.classList.remove('fade-out');
+      }, 750); // Match the fade-out duration
+    }, 20000); // Change every 5 seconds
+  </script>
 </span>
