@@ -32,7 +32,7 @@ export const headerData = {
       href: getPermalink('/homes/personal'),
     },
   ],
-  actions: [{ text: 'Contact', href: '../contact', target: '_blank' }],
+  actions: [{ text: 'Contact', href: '../contact', target: '_self' }],
 };
 
 export const footerData = {
