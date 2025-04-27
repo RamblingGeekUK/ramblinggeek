@@ -15,7 +15,7 @@ const metadata = {
     image={{ src: '~/assets/images/hero.png', alt: 'RamblingGeek Hero Image' }}
   >
     <Fragment slot="title">
-      Hello Friends
+      {Math.random() > 0.5 ? 'Hello Friends' : 'Hello World'}
     </Fragment>
   
     <Fragment slot="subtitle">
