@@ -1,0 +1,75 @@
+---
+import dotnet from '~/assets/logos/dotnet.svg';
+import npm from '~/assets/logos/npm.svg';
+import github from '~/assets/logos/github.svg';
+import raspberrypi from '~/assets/logos/raspberrypi.svg';
+import angular from '~/assets/logos/angular.svg'
+import linux from '~/assets/logos/linux.svg'
+import windows from '~/assets/logos/windows.svg'
+import duck from '~/assets/logos/duck.svg'
+
+const logos = [
+  { src: dotnet.src, alt: '.NET' },
+  { src: npm.src, alt: 'npm' },
+  { src: github.src, alt: 'GitHub' },
+  { src: raspberrypi.src, alt: 'Raspberry Pi' },
+  { src: angular.src, alt: 'Angular' },
+  { src: linux.src, alt: 'Linux' },
+  { src: windows.src, alt: 'Windows' },
+  { src: duck.src, alt: 'Rubber Duck' },
+];
+---
+<div class="rain-container">
+  {logos.map((logo) => (
+    <img src={logo.src} alt={logo.alt} class="logo" />
+  ))}
+</div>
+
+<style>
+#rain-container {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100vh;
+  pointer-events: none; 
+  z-index: 999999; /* super high, sits on top of everything */
+  overflow: hidden;
+  background: transparent; 
+}
+
+.logo {
+  position: absolute;
+  top: -100px;
+  width: 50px;
+  animation: fall linear infinite;
+  opacity: 0.8;  
+  
+}
+
+
+.logo {
+  left: calc(var(--random-left, 50%) * 1%);
+  animation-duration: calc(var(--random-duration, 8) * 1s);
+  animation-delay: calc(var(--random-delay, 0) * 1s);
+}
+
+/* Generate random values for each logo */
+.logo:nth-child(1) { --random-left: 60; --random-duration: 8; --random-delay: 0; }
+.logo:nth-child(2) { --random-left: 58; --random-duration: 10; --random-delay: 2; }
+.logo:nth-child(3) { --random-left: 40; --random-duration: 7; --random-delay: 1; }
+.logo:nth-child(4) { --random-left: 55; --random-duration: 9; --random-delay: 3; }
+.logo:nth-child(5) { --random-left: 56; --random-duration: 8; --random-delay: 0.5; }
+.logo:nth-child(6) { --random-left: 40; --random-duration: 11; --random-delay: 4; }
+.logo:nth-child(7) { --random-left: 38; --random-duration: 8; --random-delay: 1.5; }
+.logo:nth-child(8) { --random-left: 34; --random-duration: 7.5; --random-delay: 1.5; }
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+</style>

@@ -29,7 +29,7 @@ export const headerData = {
     },
     {
       text: 'CV',
-      href: getPermalink('/homes/personal'),
+      href: getPermalink('/cv'),
     },
   ],
   actions: [{ text: 'Contact', href: '../contact', target: '_self' }],
