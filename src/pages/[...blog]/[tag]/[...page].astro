@@ -31,8 +31,12 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline>Ramblings</Headline>
-    <Note>Tag: {tag.title}</Note>
+    <Headline
+      subtitle="Building. Breaking. Learning. Rambling through Tech."
+      >
+      Ramblings
+    </Headline>
+    <Note>Viewing posts with the {tag.title} tag.</Note>
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
   </section>
