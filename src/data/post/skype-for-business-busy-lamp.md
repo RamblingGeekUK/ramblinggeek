@@ -36,8 +36,9 @@ Below is the code I used for the Arduino UNO and you can see we can set the colo
 
 Next, I set about working out the Circut which wasn't the difficult as there are lots of guides on the web.  See my design below.
 
-![/images/Skype-Busy-Lamp_bb.png](/images/Skype-Busy-Lamp_bb.png)
+![Skype Busy Lamp](~/assets/images/archived/Skype-Busy-Lamp_bb.png)
 
 Links :
-
-https://blog.thoughtstuff.co.uk/2012/09/hacking-the-busylight/ https://learn.adafruit.com/rgb-led-strips/usage https://fritzing.org/home/
+* https://blog.thoughtstuff.co.uk/2012/09/hacking-the-busylight/
+* https://learn.adafruit.com/rgb-led-strips/usage 
+* https://fritzing.org/home/
