@@ -1,7 +1,7 @@
 ---
 import Layout from '~/layouts/Layout.astro';
 import { getHomePermalink } from '~/utils/permalinks';
-
+import Hero from '~/components/widgets/Hero.astro';
 const title = `Error 404`;
 ---
 
@@ -18,6 +18,7 @@ const title = `Error 404`;
           But dont worry, you can find plenty of other things on our homepage.
         </p>
         <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
+        <Hero image={{ src: '~/assets/images/404.gif', alt: 'RamblingGeek Lost' }}></Hero>
       </div>
     </div>
   </section>
