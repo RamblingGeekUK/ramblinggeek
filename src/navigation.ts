@@ -53,7 +53,8 @@ export const footerData = {
           { text: 'kryptossolutions.co.uk', href: 'https://kryptossolutions.co.uk' },
           { text: 'waynetaylor.dev', href: 'https://waynetaylor.dev' },
           { text: 'matrixdisplay.io', href: 'https://matrixdisplay.io' },
-          { text: 'forkedfromltt.com', href: 'https://forkedfromltt.com' }
+          { text: 'forkedfromltt.com', href: 'https://forkedfromltt.com' },
+          { text: 'Merch', href: 'https://merch.ramblinggeek.dev' }
         ],
       },
   ],
