@@ -9,10 +9,6 @@ export const headerData = {
           text: 'All',
           href: getBlogPermalink(),
         },
-        // {
-        //   text: 'Category Page',
-        //   href: getPermalink('raspberry', 'category'),
-        // },
         {
           text: 'Raspberry Pi',
           href: getPermalink('raspberry', 'tag'),
@@ -26,10 +22,6 @@ export const headerData = {
     {
       text: 'What I Use',
       href: getPermalink('/whatiuse'),
-    },
-    {
-      text: 'CV',
-      href: getPermalink('/cv'),
     },
   ],
   actions: [{ text: 'Contact', href: '../contact', target: '_self' }],
@@ -52,9 +44,7 @@ export const footerData = {
           { text: 'kryptos.co.uk', href: 'https://kryptos.co.uk' },
           { text: 'kryptossolutions.co.uk', href: 'https://kryptossolutions.co.uk' },
           { text: 'waynetaylor.dev', href: 'https://waynetaylor.dev' },
-          { text: 'matrixdisplay.io', href: 'https://matrixdisplay.io' },
-          { text: 'forkedfromltt.com', href: 'https://forkedfromltt.com' },
-          { text: 'Merch', href: 'https://merch.ramblinggeek.dev' }
+          { text: 'forkedfromltt.com', href: 'https://forkedfromltt.com' }
         ],
       },
   ],
@@ -66,6 +56,7 @@ export const footerData = {
   // ],
   socialLinks: [
     
+    { ariaLabel: 'Merch', icon: 'tabler:shirt', href: 'https://merch.ramblinggeek.dev/en-gbp' },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/RamblingGeekUK' },
     { ariaLabel: 'BlueSky', icon: 'tabler:brand-bluesky', href: 'https://bsky.app/profile/ramblinggeek.social' },
     { ariaLabel: 'Twitch', icon: 'tabler:brand-twitch', href: 'https://www.twitch.tv/ramblinggeek' },

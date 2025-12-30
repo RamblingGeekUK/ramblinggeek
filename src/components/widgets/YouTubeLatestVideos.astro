@@ -1,0 +1,125 @@
+---
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Button from '~/components/ui/Button.astro';
+import type { Widget } from '~/types';
+
+export interface Props extends Widget {
+  title?: string;
+  linkText?: string;
+  linkUrl?: string;
+  information?: string;
+  maxVideos?: number;
+}
+
+const { 
+  title = 'Latest Videos',
+  linkText = 'View all videos',
+  linkUrl = 'https://www.youtube.com/@RamblingGeekUK',
+  information = 'Watch my latest YouTube content',
+  maxVideos = 3,
+  
+  id,
+  isDark = false,
+  classes = {},
+  bg = await Astro.slots.render('bg'),
+} = Astro.props;
+
+// YouTube channel
+const channelId = 'UCjmFVvSmeVJp_RzzPChusFg'; // RamblingGeekUK channel
+const apiKey = import.meta.env.YOUTUBE_API_KEY;
+
+let videos = [];
+
+// Fetch latest videos from YouTube API if API key is available
+if (apiKey) {
+  try {
+    // First, get the channel's uploads playlist ID
+    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
+    const channelResponse = await fetch(channelUrl);
+    const channelData = await channelResponse.json();
+    
+    if (channelData.items && channelData.items.length > 0) {
+      const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+      
+      // Now fetch videos from the uploads playlist
+      const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=${maxVideos}&key=${apiKey}`;
+      const playlistResponse = await fetch(playlistUrl);
+      const playlistData = await playlistResponse.json();
+      
+      if (playlistData.items) {
+        videos = playlistData.items.map((item: any) => ({
+          id: item.snippet.resourceId.videoId,
+          title: item.snippet.title,
+          description: item.snippet.description,
+          thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
+          publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+        }));
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching YouTube videos:', error);
+  }
+}
+---
+
+{videos.length > 0 && (
+  <WidgetWrapper id={id} isDark={isDark} containerClass={classes?.container as string} bg={bg}>
+    <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
+      {title && (
+        <div class="md:max-w-sm">
+          <h2
+            class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
+            set:html={title}
+          />
+          {linkText && linkUrl && (
+            <Button variant="link" href={linkUrl} target="_blank">
+              {linkText} »
+            </Button>
+          )}
+        </div>
+      )}
+
+      {information && <p class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md" set:html={information} />}
+    </div>
+    
+    <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {videos.map((video) => (
+        <a
+          href={`https://www.youtube.com/watch?v=${video.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300"
+        >
+          <div class="relative aspect-video overflow-hidden">
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+              <svg class="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          
+          <div class="p-4">
+            <h3 class="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {video.title}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+              {video.description}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-500">
+              {video.publishedAt}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </WidgetWrapper>
+)}

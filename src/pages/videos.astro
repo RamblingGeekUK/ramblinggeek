@@ -1,0 +1,156 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Headline from '~/components/ui/Headline.astro';
+
+const metadata = {
+  title: 'Latest YouTube Videos - RamblingGeek',
+  description: 'Check out my latest YouTube videos',
+};
+
+// YouTube channel
+const channelId = 'UCjmFVvSmeVJp_RzzPChusFg'; // RamblingGeekUK channel
+const apiKey = import.meta.env.YOUTUBE_API_KEY;
+
+let videos = [];
+let errorMessage = '';
+
+console.log('API Key present:', !!apiKey);
+
+// Fetch latest videos from YouTube API if API key is available
+if (apiKey) {
+  try {
+    // First, get the channel's uploads playlist ID
+    console.log('Fetching channel info...');
+    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
+    const channelResponse = await fetch(channelUrl);
+    const channelData = await channelResponse.json();
+    
+    console.log('Channel API response:', channelData);
+    
+    if (channelData.error) {
+      errorMessage = `YouTube API Error: ${channelData.error.message}`;
+      console.error(errorMessage);
+    } else if (channelData.items && channelData.items.length > 0) {
+      const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+      console.log('Uploads playlist ID:', uploadsPlaylistId);
+      
+      // Now fetch videos from the uploads playlist
+      const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=3&key=${apiKey}`;
+      console.log('Fetching videos...');
+      
+      const playlistResponse = await fetch(playlistUrl);
+      const playlistData = await playlistResponse.json();
+      
+      console.log('Playlist API response:', playlistData);
+      
+      if (playlistData.items) {
+        videos = playlistData.items.map((item: any) => ({
+          id: item.snippet.resourceId.videoId,
+          title: item.snippet.title,
+          description: item.snippet.description,
+          thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
+          publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+        }));
+        console.log(`Fetched ${videos.length} videos`);
+      }
+    }
+  } catch (error) {
+    errorMessage = `Error fetching YouTube videos: ${error}`;
+    console.error(errorMessage);
+  }
+} else {
+  console.log('No API key found');
+}
+
+// Fallback to manual video list if API is not available or fails
+if (videos.length === 0) {
+  videos = [
+    {
+      id: 'PLACEHOLDER1',
+      title: 'Latest Video 1',
+      description: 'Description for latest video',
+      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER1/maxresdefault.jpg',
+      publishedAt: 'Recently',
+    },
+    {
+      id: 'PLACEHOLDER2',
+      title: 'Latest Video 2',
+      description: 'Description for second video',
+      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER2/maxresdefault.jpg',
+      publishedAt: 'Recently',
+    },
+    {
+      id: 'PLACEHOLDER3',
+      title: 'Latest Video 3',
+      description: 'Description for third video',
+      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER3/maxresdefault.jpg',
+      publishedAt: 'Recently',
+    },
+  ];
+}
+---
+
+<Layout metadata={metadata}>
+  <WidgetWrapper id="videos" containerClass="max-w-6xl">
+    <Headline
+      title="Latest YouTube Videos"
+      subtitle="Check out my most recent uploads"
+      tagline="Videos"
+    />
+    
+    <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
+      {videos.map((video) => (
+        <a
+          href={`https://www.youtube.com/watch?v=${video.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300"
+        >
+          <div class="relative aspect-video overflow-hidden">
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+              <svg class="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          
+          <div class="p-4">
+            <h3 class="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {video.title}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+              {video.description}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-500">
+              {video.publishedAt}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="mt-8 text-center">
+      <a
+        href="https://www.youtube.com/@RamblingGeekUK"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors duration-300"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        View All Videos on YouTube
+      </a>
+    </div>
+  </WidgetWrapper>
+</Layout>

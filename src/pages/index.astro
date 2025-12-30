@@ -3,6 +3,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import RainingTech from '~/components/widgets/RainingTech.astro';
+import YouTubeLatestVideos from '~/components/widgets/YouTubeLatestVideos.astro';
 const metadata = {
   title: 'RamblingGeek - Wayne Taylor',
   ignoreTitleTemplate: true,
@@ -11,9 +12,7 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <RainingTech/>
-  <Hero
-    image={{ src: '~/assets/images/hero.png', alt: 'RamblingGeek Hero Image' }}
-  >
+  <Hero classes={{ container: 'pb-0' }}>
     <Fragment slot="title">
       {['Hello Friends', 'Hello World', 'Welcome', 'Hey Friends'][Math.floor(Math.random() * 4)]}
     </Fragment>
@@ -28,6 +27,12 @@ const metadata = {
   <BlogLatestPosts
     title="Ramblings"
     information={`Read the various Ramblings from my tinkering, with Raspberry Pi's, Microcontrollers.`}
+  />
+
+  <YouTubeLatestVideos
+    title="Latest Videos"
+    information="Watch my latest YouTube videos covering tech, coding, and tinkering projects."
+    linkText="View channel on YouTube"
   />
 
 </Layout>
