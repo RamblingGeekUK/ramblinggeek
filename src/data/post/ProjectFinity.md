@@ -25,6 +25,6 @@ Fusion add-ons, websites, etc.
 I have made 5x5, approx. 200mm x 200mm, plate, with a steel plate.  This allows the GridFinity bins with magnets installed to stick to the plate, allowing projects
 to remain setup and easily moved or stored. 
 
-![ProjectFinity](~/assets/images/ProjectFinity_02.mov)
+![ProjectFinity](~/assets/images/ProjectFinity_02.mp4)
 
 This is an early version.  I intend on creating a method of stacking the project boards, so that they can be put away when not in use.
