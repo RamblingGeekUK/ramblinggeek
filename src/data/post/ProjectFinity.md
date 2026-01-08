@@ -7,7 +7,6 @@ tags:
   - 3D Printing
   - Fusion
   - Electronics
-image: 
 excerpt: Storing Electronics Project, in a manageable way
 ---
 
