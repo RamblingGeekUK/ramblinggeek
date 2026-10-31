@@ -1,7 +1,14 @@
-// Fetches the latest uploads from the channel's public RSS feed at build time.
-// No API key or quota needed. The feed returns the 15 most recent uploads.
+// Fetches the latest uploads at build time from YouTube's public RSS feeds (no API key).
+// - Main channel feed: latest 15 uploads (videos, shorts and live streams).
+// - Live-streams feed (playlist UULV...): used to filter live streams out.
+// Feeds are retried, as they sometimes return 404/500. If the main feed still
+// fails, returns [] and logs a warning so the deploy still succeeds.
 
 export const YOUTUBE_CHANNEL_ID = 'UCjmFVvSmeVJp_RzzPChusFg'; // RamblingGeekUK
+
+const FEED = 'https://www.youtube.com/feeds/videos.xml';
+const CHANNEL_FEED = `${FEED}?channel_id=${YOUTUBE_CHANNEL_ID}`;
+const LIVE_FEED = `${FEED}?playlist_id=UULV${YOUTUBE_CHANNEL_ID.slice(2)}`;
 
 export interface YouTubeVideo {
   id: string;
@@ -24,42 +31,61 @@ const tag = (xml: string, name: string) => {
   return m ? decode(m[1].trim()) : '';
 };
 
-let cache: Promise<YouTubeVideo[]> | undefined;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchFeed(): Promise<YouTubeVideo[]> {
-  const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`YouTube feed request failed: ${res.status} ${res.statusText}`);
+async function fetchEntries(url: string): Promise<string[]> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      return (await res.text()).match(/<entry>[\s\S]*?<\/entry>/g) ?? [];
+    } catch (e) {
+      lastError = e;
+      if (attempt < 3) await sleep(attempt * 2000);
+    }
   }
-
-  const xml = await res.text();
-  const entries = xml.match(/<entry>[\s\S]*?<\/entry>/g) ?? [];
-
-  const videos = entries.map((entry) => {
-    const id = tag(entry, 'yt:videoId');
-    return {
-      id,
-      title: tag(entry, 'title'),
-      description: tag(entry, 'media:description'),
-      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
-      publishedAt: new Date(tag(entry, 'published')).toLocaleDateString('en-GB', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-    };
-  });
-
-  if (videos.length === 0) {
-    throw new Error('YouTube feed returned no videos');
-  }
-  return videos;
+  throw lastError;
 }
 
-// Throws on failure so a broken fetch fails the build instead of silently
-// deploying a page with stale or missing videos.
+async function load(): Promise<YouTubeVideo[]> {
+  let entries: string[];
+  try {
+    entries = await fetchEntries(CHANNEL_FEED);
+  } catch (e) {
+    console.warn(`[youtube] Channel feed failed (${e}); building without videos`);
+    return [];
+  }
+
+  // Channels with no live streams can 404 here, so treat failure as "no lives".
+  let liveIds = new Set<string>();
+  try {
+    liveIds = new Set((await fetchEntries(LIVE_FEED)).map((e) => tag(e, 'yt:videoId')));
+  } catch (e) {
+    console.warn(`[youtube] Live-streams feed failed (${e}); not filtering lives`);
+  }
+
+  return entries
+    .map((entry) => {
+      const id = tag(entry, 'yt:videoId');
+      return {
+        id,
+        title: tag(entry, 'title'),
+        description: tag(entry, 'media:description'),
+        thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+        publishedAt: new Date(tag(entry, 'published')).toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      };
+    })
+    .filter((v) => v.id && !liveIds.has(v.id));
+}
+
+let cache: Promise<YouTubeVideo[]> | undefined;
+
 export async function getLatestVideos(max = 3): Promise<YouTubeVideo[]> {
-  cache ??= fetchFeed();
+  cache ??= load();
   return (await cache).slice(0, max);
 }

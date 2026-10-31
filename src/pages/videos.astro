@@ -20,6 +20,10 @@ const videos = await getLatestVideos(12);
       tagline="Videos"
     />
     
+    {videos.length === 0 && (
+      <p class="mt-8 text-center text-muted">Couldn't load the latest videos right now. Head over to the channel below.</p>
+    )}
+
     <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
       {videos.map((video) => (
         <a
