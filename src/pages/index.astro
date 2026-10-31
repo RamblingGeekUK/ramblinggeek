@@ -9,30 +9,19 @@ const metadata = {
   ignoreTitleTemplate: true,
 };
 ---
-
 <Layout metadata={metadata}>
   <RainingTech/>
-  <Hero classes={{ container: 'pb-0' }}>
-    <Fragment slot="title">
-      {['Hello Friends', 'Hello World', 'Welcome', 'Hey Friends'][Math.floor(Math.random() * 4)]}
-    </Fragment>
-  
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">Code. Create. Tinker.</span>
-      </span>
-    </Fragment>
-  </Hero>
-  
-  <BlogLatestPosts
-    title="Ramblings"
-    information={`Read the various Ramblings from my tinkering, with Raspberry Pi's, Microcontrollers.`}
-  />
+  <div class="flex min-h-[70vh] items-center justify-center">
+    <Hero classes={{ container: 'pb-3' }}>
+      <Fragment slot="title">
+        {['Hello Friends', 'Hello World', 'Welcome', 'Hey Friends'][Math.floor(Math.random() * 4)]}
+      </Fragment>
 
-  <YouTubeLatestVideos
-    title="Latest Videos"
-    information="Watch my latest YouTube videos covering tech, coding, and tinkering projects."
-    linkText="View channel on YouTube"
-  />
-
+      <Fragment slot="subtitle">
+        <span class="hidden sm:inline">
+          <span class="font-semibold">Code. Create. Tinker.</span>
+        </span>
+      </Fragment>
+    </Hero>
+  </div>
 </Layout>
