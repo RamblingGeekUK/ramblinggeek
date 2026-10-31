@@ -7,10 +7,9 @@ tags:
   - 3D Printing
   - Fusion
   - Electronics
+  - archived
 image: ~/assets/images/ProjectFinity_01.jpg
-excerpt: Storing Electronics Project, in a manageable way
-tags:
-  - "archived"
+excerpt: Storing Electronics Project, in a manageable way 
 ---
 
 ### The Problem?
