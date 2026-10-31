@@ -43,8 +43,7 @@ export const footerData = {
         links: [
           { text: 'kryptos.co.uk', href: 'https://kryptos.co.uk' },
           { text: 'kryptossolutions.co.uk', href: 'https://kryptossolutions.co.uk' },
-          { text: 'waynetaylor.dev', href: 'https://waynetaylor.dev' },
-          { text: 'forkedfromltt.com', href: 'https://forkedfromltt.com' }
+          { text: 'waynetaylor.dev', href: 'https://waynetaylor.dev' } 
         ],
       },
   ],
