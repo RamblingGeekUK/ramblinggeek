@@ -2,97 +2,14 @@
 import Layout from '~/layouts/PageLayout.astro';
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import Headline from '~/components/ui/Headline.astro';
+import { getLatestVideos } from '~/utils/youtube';
 
 const metadata = {
   title: 'Latest YouTube Videos - RamblingGeek',
   description: 'Check out my latest YouTube videos',
 };
 
-// YouTube channel
-const channelId = 'UCjmFVvSmeVJp_RzzPChusFg'; // RamblingGeekUK channel
-const apiKey = import.meta.env.YOUTUBE_API_KEY;
-
-let videos = [];
-let errorMessage = '';
-
-console.log('API Key present:', !!apiKey);
-
-// Fetch latest videos from YouTube API if API key is available
-if (apiKey) {
-  try {
-    // First, get the channel's uploads playlist ID
-    console.log('Fetching channel info...');
-    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
-    const channelResponse = await fetch(channelUrl);
-    const channelData = await channelResponse.json();
-    
-    console.log('Channel API response:', channelData);
-    
-    if (channelData.error) {
-      errorMessage = `YouTube API Error: ${channelData.error.message}`;
-      console.error(errorMessage);
-    } else if (channelData.items && channelData.items.length > 0) {
-      const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
-      console.log('Uploads playlist ID:', uploadsPlaylistId);
-      
-      // Now fetch videos from the uploads playlist
-      const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=3&key=${apiKey}`;
-      console.log('Fetching videos...');
-      
-      const playlistResponse = await fetch(playlistUrl);
-      const playlistData = await playlistResponse.json();
-      
-      console.log('Playlist API response:', playlistData);
-      
-      if (playlistData.items) {
-        videos = playlistData.items.map((item: any) => ({
-          id: item.snippet.resourceId.videoId,
-          title: item.snippet.title,
-          description: item.snippet.description,
-          thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
-          publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString('en-GB', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-        }));
-        console.log(`Fetched ${videos.length} videos`);
-      }
-    }
-  } catch (error) {
-    errorMessage = `Error fetching YouTube videos: ${error}`;
-    console.error(errorMessage);
-  }
-} else {
-  console.log('No API key found');
-}
-
-// Fallback to manual video list if API is not available or fails
-if (videos.length === 0) {
-  videos = [
-    {
-      id: 'PLACEHOLDER1',
-      title: 'Latest Video 1',
-      description: 'Description for latest video',
-      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER1/maxresdefault.jpg',
-      publishedAt: 'Recently',
-    },
-    {
-      id: 'PLACEHOLDER2',
-      title: 'Latest Video 2',
-      description: 'Description for second video',
-      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER2/maxresdefault.jpg',
-      publishedAt: 'Recently',
-    },
-    {
-      id: 'PLACEHOLDER3',
-      title: 'Latest Video 3',
-      description: 'Description for third video',
-      thumbnail: 'https://img.youtube.com/vi/PLACEHOLDER3/maxresdefault.jpg',
-      publishedAt: 'Recently',
-    },
-  ];
-}
+const videos = await getLatestVideos(12);
 ---
 
 <Layout metadata={metadata}>

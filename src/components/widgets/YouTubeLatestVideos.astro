@@ -2,6 +2,7 @@
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import Button from '~/components/ui/Button.astro';
 import type { Widget } from '~/types';
+import { getLatestVideos } from '~/utils/youtube';
 
 export interface Props extends Widget {
   title?: string;
@@ -24,46 +25,7 @@ const {
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
 
-// YouTube channel
-const channelId = 'UCjmFVvSmeVJp_RzzPChusFg'; // RamblingGeekUK channel
-const apiKey = import.meta.env.YOUTUBE_API_KEY;
-
-let videos = [];
-
-// Fetch latest videos from YouTube API if API key is available
-if (apiKey) {
-  try {
-    // First, get the channel's uploads playlist ID
-    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
-    const channelResponse = await fetch(channelUrl);
-    const channelData = await channelResponse.json();
-    
-    if (channelData.items && channelData.items.length > 0) {
-      const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
-      
-      // Now fetch videos from the uploads playlist
-      const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=${maxVideos}&key=${apiKey}`;
-      const playlistResponse = await fetch(playlistUrl);
-      const playlistData = await playlistResponse.json();
-      
-      if (playlistData.items) {
-        videos = playlistData.items.map((item: any) => ({
-          id: item.snippet.resourceId.videoId,
-          title: item.snippet.title,
-          description: item.snippet.description,
-          thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
-          publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString('en-GB', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-        }));
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching YouTube videos:', error);
-  }
-}
+const videos = await getLatestVideos(maxVideos);
 ---
 
 {videos.length > 0 && (
