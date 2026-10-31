@@ -18,11 +18,7 @@ export const headerData = {
           href: getPermalink('archived', 'tag'),
         },
       ],
-    },
-    {
-      text: 'What I Use',
-      href: getPermalink('/whatiuse'),
-    },
+    }
   ],
   actions: [{ text: 'Contact', href: '../contact', target: '_self' }],
 };
