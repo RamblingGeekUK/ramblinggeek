@@ -9,6 +9,8 @@ tags:
   - Electronics
 image: ~/assets/images/ProjectFinity_01.jpg
 excerpt: Storing Electronics Project, in a manageable way
+tags:
+  - "archived"
 ---
 
 ### The Problem?
